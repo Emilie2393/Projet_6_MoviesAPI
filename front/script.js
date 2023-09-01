@@ -1,5 +1,5 @@
 
-async function getBestMovie(url) {
+async function getData(url) {
     const response = await fetch(url);
     if (!response.ok) {
         throw new Error (errorMessage + "Code erreur: " + response.status);
@@ -21,9 +21,22 @@ function publishBestMovies(bestMovie){
     title.textContent = bestMovie.title
 }
 
+function publishCarrousel(Pictures){
+    console.log(Pictures)
+    const container = document.querySelector('#Container')
+    for(let i = 0; i < 8; i++){
+        img=document.createElement("img")
+        img.id="img" + i
+        img.src = Pictures[i].image_url
+        child(container, img)
+    }
+}
+
 async function launch(){
-    const bestMovie = await getBestMovie("http://127.0.0.1:8000/api/v1/titles/?sort_by=-imdb_score")
+    const bestMovie = await getData("http://127.0.0.1:8000/api/v1/titles/?sort_by=-imdb_score")
+    const cat1Pictures =  await getData("http://127.0.0.1:8000/api/v1/titles/?genre_contains=Fantasy&sort_by=-imdb_score")
     publishBestMovies(bestMovie.results[0])
+    publishCarrousel(cat1Pictures.results)
 }
 
 launch()
