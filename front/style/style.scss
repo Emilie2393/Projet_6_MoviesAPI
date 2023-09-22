@@ -16,7 +16,6 @@ nav {
 .Page {
     width: 100%;
     flex-direction: column;
-    align-items: center;
     display: flex;
     justify-content: center;
 }
@@ -42,3 +41,79 @@ nav {
         }
     }
 }
+
+li{
+    background-color: rgb(135, 157, 166);
+    height: 268px;
+    list-style: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    scroll-snap-align: start;
+}
+.img{
+    height: 268px;
+}
+
+#img0, #img1, #img2, #img3, #img4, #img5, #img6{
+    width: 182px;
+    height: 268px;
+    object-fit: cover;
+}
+
+.Category1, .Category2{
+    position: relative;
+    width: 100%;
+    max-width: 1100px;
+    margin: 0 auto;
+    &__carousel{
+        display: grid;
+        grid-auto-flow: column; 
+        grid-auto-columns: calc((100% / 3) - 12px);
+        overflow: hidden;
+        gap: 18px;
+        padding: 0;
+        overflow-x: auto;
+        scroll-behavior: smooth;
+        scroll-snap-type: x mandatory;
+    }
+    
+    &__button{
+        height: 30px;
+        width: 30px;
+        background-color: grey;
+        position: absolute;
+        top: 50%;
+        transform: translateY(-50%);
+        box-shadow: 0 5px 5px(grey);
+        border-radius: 50%;
+        &:first-child{
+            left: -22px;
+        }
+        &:last-child{
+            right: -22px;
+        }
+    }
+}
+
+.no-transition{
+    scroll-behavior: auto;
+}
+
+@media screen and (max-width: 900px) {
+    .Category1, .Category2{
+        &__carousel{
+            grid-auto-columns: calc((100% / 3) - 9px);
+        }
+    }
+}
+
+@media screen and (max-width: 600px) {
+    .Category1, .Category2{
+        &__carousel{
+            grid-auto-columns: 100%;
+        }
+    }
+}
+
+            
