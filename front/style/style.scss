@@ -100,6 +100,41 @@ li{
     scroll-behavior: auto;
 }
 
+.Modal{
+    position: fixed; 
+    z-index: 1; 
+    left: 0;
+    top: 0;
+    width: 100%; 
+    height: 100%;
+    overflow: auto;
+    display: flex;
+    background-color: rgba(227, 235, 238, 0.897);
+    &__flex{
+        margin: 13% auto;
+        position: relative;
+        background: white;
+        width: 300px;
+        border-radius: 10%;
+        &__button{
+            position: absolute;
+            top: -23px;
+            right: 0;
+        }
+        & div {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            & img{
+                border-radius: 10%;
+                width: 200px;
+            }
+            
+        }
+        
+    }
+}
+
 @media screen and (max-width: 900px) {
     .Category1, .Category2{
         &__carousel{

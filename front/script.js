@@ -20,7 +20,7 @@ function publishBestMovies(bestMovie) {
     title.textContent = bestMovie.title
 }
 
-function Slider(category, number){
+function slider(category, number){
     const button = document.querySelectorAll(`.Category${number}__button`)
     const firstCard = document.getElementsByTagName("li")[0].offsetWidth;
     const carouselCards = [...category.children]
@@ -46,10 +46,52 @@ function Slider(category, number){
             category.scrollLeft = category.offsetWidth * 1.5;
             category.classList.remove("no-transition")
         }
-        
     }
     category.addEventListener("scroll", infiniteScroll)
+}
+
+function Modal(pageOne, pageTwo){
+
     
+    selected = document.querySelectorAll("img")
+    for (let i = 1; i < selected.length; i++) {
+        const openModal = () => {
+            for (let e=0; e < pageOne.length; e++){
+                if (selected[i].id == pageOne[e].id){
+                    createModal(pageOne[e])
+                }
+            }
+            
+        }
+        selected[i].addEventListener("click", openModal)
+    }
+
+}
+
+function createModal(movie){
+    let page = document.querySelector('.Page')
+    let section = document.createElement("div")
+    child(page, section)
+    section.className = "Modal"
+    let divFlex = document.createElement("div")
+    divFlex.className = "Modal__flex"
+    child(section, divFlex)
+    let button = document.createElement("button")
+    button.className = "Modal__flex__button"
+    button.textContent = "X"
+    child(divFlex, button)
+    let inner = document.createElement("div")
+    child(divFlex, inner)
+    let modalImg = document.createElement("img")
+    modalImg.src = movie.image_url
+    child(inner, modalImg)
+    let h4 = document.createElement("h4")
+    h4.textContent = movie.title
+    child(inner, h4)
+    let director = document.createElement("p")
+    director.textContent = movie.directors
+    child(inner, director)
+        
 }
 
 async function checkImg(url) {
@@ -74,27 +116,27 @@ async function publishCarrousel(pictures, nextPictures, number) {
         div.className = "img"
         child(li, div)
         let img = document.createElement("img")
-        img.id = "img" + i
         child(div, img)
-        console.log("1",img)
         if (pictures[i] == undefined) {
             let url = nextPictures[newPage].image_url
+            img.src = url
+            img.id = nextPictures[newPage].id
             test = await checkImg(url)
-            console.log("yo",test)
             if (test.status === 404 || !test){
                 url = nextPictures[newPage + 1].image_url
                 img.src = url
-                console.log("dhud", url)
+                img.id = nextPictures[newPage + 1].id
             }
-            img.src = url
             newPage += 1
         }
         else {
             img.src = pictures[i].image_url
+            img.id = pictures[i].id
         }
     }
-    Slider(container, number)
+    slider(container, number)
 }
+
 
 async function launch() {
     const bestMovie = await getData("http://127.0.0.1:8000/api/v1/titles/?sort_by=-imdb_score")
@@ -105,6 +147,7 @@ async function launch() {
     publishBestMovies(bestMovie.results[0])
     await publishCarrousel(cat1Pictures.results, cat1NextPage.results, 1)
     await publishCarrousel(cat2Pictures.results, cat2NextPage.results, 2)
+    Modal(cat1Pictures.results, cat1NextPage.results)
 }
 
 launch()
