@@ -27,23 +27,25 @@ function slider(category, number){
     button.forEach(btn => {
         btn.addEventListener("click", () => {
             category.scrollLeft += btn.id === "left" ? -firstCard : firstCard
+            console.log("pass")
         })
     })
     let card = Math.round(category.offsetWidth / firstCard)
+    console.log(card)
     carouselCards.slice(-card).reverse().forEach(card => {
         category.insertAdjacentHTML("afterbegin", card.outerHTML);
     })
-    carouselCards.slice(0, -card).forEach(card => {
+    carouselCards.slice(0, card).forEach(card => {
         category.insertAdjacentHTML("beforeend", card.outerHTML);
     })
     const infiniteScroll = () => {
         if (category.scrollLeft === 0) {
             category.classList.add("no-transition");
-            category.scrollLeft = category.scrollWidth - (2.5 * category.offsetWidth);   
+            category.scrollLeft = category.scrollWidth - (2 * category.offsetWidth);   
             category.classList.remove("no-transition")
         } else if (Math.ceil(category.scrollLeft) === category.scrollWidth - category.offsetWidth){
             category.classList.add("no-transition")
-            category.scrollLeft = category.offsetWidth * 1.5;
+            category.scrollLeft = category.offsetWidth;
             category.classList.remove("no-transition")
         }
     }
@@ -71,7 +73,7 @@ function modal(page, page2){
     }
 }
 
-function createModal(movie){
+async function createModal(movie){
     let page = document.querySelector('.Page')
     let section = document.createElement("div")
     child(page, section)
@@ -92,11 +94,17 @@ function createModal(movie){
     modalImg.src = movie.image_url
     child(inner, modalImg)
     let h4 = document.createElement("h4")
-    h4.textContent = movie.title
+    h4.innerHTML = movie.title
     child(inner, h4)
-    let director = document.createElement("p")
-    director.textContent = movie.directors
-    child(inner, director)
+    const getInfos = await fetch(movie.url)
+    const newInfos = await getInfos.json()
+    let infos = document.createElement("p")
+    infos.innerHTML = `Realisateur: ${movie.directors} <br>Description: ${newInfos.description} <br>Genres: ${movie.genres} <br>Année: ${movie.year}
+                    <br>Note: ${newInfos.rated} <br>Score imdb: ${movie.imdb_score} <br>Acteurs: ${movie.actors}
+                    <br>Durée: ${newInfos.duration} <br>Pays: ${newInfos.countries} <br>Résultats box-office: ${newInfos.worldwide_gross_income}`
+    child(inner, infos)
+    
+    
         
 }
 
@@ -148,7 +156,7 @@ async function publishCarrousel(pictures, nextPictures, number) {
             }
         }
     }
-    page.style.display = "flex"
+    //page.style.display = "flex"
     slider(container, number)
 }
 
