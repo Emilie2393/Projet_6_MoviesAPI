@@ -66,7 +66,7 @@ body {
 }
 
 h3 {
-  margin-left: 55px;
+  margin-left: 15%;
   text-shadow: rgb(173, 187, 190) 2px 0 10px;
 }
 
@@ -137,7 +137,7 @@ li {
   background-color: rgba(227, 235, 238, 0.897);
 }
 .Modal__flex {
-  margin: 7% auto;
+  margin: 6% auto;
   position: relative;
   background: white;
   width: 360px;
@@ -147,6 +147,7 @@ li {
   position: absolute;
   top: -23px;
   right: 0;
+  cursor: pointer;
 }
 .Modal__flex div {
   display: flex;
