@@ -178,8 +178,8 @@ footer div {
 }
 
 @media screen and (max-width: 900px) {
-  .Category1__carousel, .Category2__carousel, .Category3__carousel {
-    grid-auto-columns: calc(33.3333333333% - 14px);
+  .Category1, .Category2, .Category3 {
+    width: 91%;
   }
   .Category1 .Modal__flex, .Category2 .Modal__flex, .Category3 .Modal__flex {
     margin: 4% auto;
