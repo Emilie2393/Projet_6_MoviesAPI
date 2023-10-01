@@ -156,7 +156,7 @@ async function publishCarrousel(pictures, nextPictures, number) {
             }
         }
     }
-    //page.style.display = "flex"
+    page.style.display = "flex"
     slider(container, number)
 }
 
