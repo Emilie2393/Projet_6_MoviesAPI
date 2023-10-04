@@ -24,20 +24,24 @@ function slider(category, number){
     const button = document.querySelectorAll(`.Category${number}__button`)
     const firstCard = document.getElementsByTagName("li")[0].offsetWidth;
     const carouselCards = [...category.children]
+    console.log("carcard", carouselCards)
+    // move carousel left or right by the size of one card
     button.forEach(btn => {
         btn.addEventListener("click", () => {
             category.scrollLeft += btn.id === "left" ? -firstCard : firstCard
-            console.log("pass")
         })
     })
+    // count numbers of cards who fits into carousel
     let card = Math.round(category.offsetWidth / firstCard)
-    console.log(card)
+    // add 3 cards before start of the 7 movie tags 
     carouselCards.slice(-card).reverse().forEach(card => {
         category.insertAdjacentHTML("afterbegin", card.outerHTML);
     })
+    // add 3 cards after the end of the 7 movie tags 
     carouselCards.slice(0, card).forEach(card => {
         category.insertAdjacentHTML("beforeend", card.outerHTML);
     })
+    // go to position needed if scroll is at beginning or end of carousel
     const infiniteScroll = () => {
         if (category.scrollLeft === 0) {
             category.classList.add("no-transition");
@@ -55,16 +59,16 @@ function slider(category, number){
 function modal(page, page2){
     selected = document.querySelectorAll("img")
     for (let i = 1; i < selected.length; i++) {
+        // if selected movie.id match api movie.id then create modal 
+        // for this movie with api infos
         const openModal = () => {
             for (let e=0; e < page.length; e++){
                 if (selected[i].id == page[e].id){
-                    console.log(page[e])
                     createModal(page[e])
                 }
             }
             for (let e=0; e < page2.length; e++){
                 if (selected[i].id == page2[e].id){
-                    console.log(page2[e])
                     createModal(page2[e])
                 }
             }
@@ -103,16 +107,13 @@ async function createModal(movie){
                     <br>Note: ${newInfos.rated} <br>Score imdb: ${movie.imdb_score} <br>Acteurs: ${movie.actors}
                     <br>Durée: ${newInfos.duration} <br>Pays: ${newInfos.countries} <br>Résultats box-office: ${newInfos.worldwide_gross_income}`
     child(inner, infos)
-    
-    
-        
 }
 
 async function checkImg(url) {
     try {
         response = await fetch(url)
     } catch(erreur) {
-        console.log("Non trouvé")
+        console.log("Lien mort sur l'API:", erreur)
         return false
     }
     return response
@@ -120,9 +121,10 @@ async function checkImg(url) {
 
 async function publishCarrousel(pictures, nextPictures, number) {
     newPage = 0
+    nb = 7
     const page = document.querySelector(".Page")
     const container = document.querySelector(`.Category${number}__carousel`)
-    for (let i = 0; i < 7; i++) {
+    for (let i = 0; i < nb; i++) {
         let li = document.createElement("li")
         li.className = "card"
         child(container, li)
@@ -153,6 +155,7 @@ async function publishCarrousel(pictures, nextPictures, number) {
                 img.src = url
                 img.id = pictures[i + 1].id
                 i += 1
+                nb += 1
             }
         }
     }
@@ -163,16 +166,19 @@ async function publishCarrousel(pictures, nextPictures, number) {
 
 async function launch() {
     const bestMovie = await getData("http://127.0.0.1:8000/api/v1/titles/?sort_by=-imdb_score")
-    const cat3Pictures = await getData("http://127.0.0.1:8000/api/v1/titles/?genre_contains=Fantasy&sort_by=-imdb_score")
-    const cat2Pictures = await getData("http://127.0.0.1:8000/api/v1/titles/?genre_contains=adventure&sort_by=-imdb_score")
-    const cat3NextPage = await getData("http://127.0.0.1:8000/api/v1/titles/?genre_contains=Fantasy&page=2&sort_by=-imdb_score")
-    const cat2NextPage = await getData("http://127.0.0.1:8000/api/v1/titles/?genre_contains=adventure&page=2&sort_by=-imdb_score")
+    const bestMovieNextPage = await getData("http://127.0.0.1:8000/api/v1/titles/?page=2&sort_by=-imdb_score")
     const cat1Pictures = await getData("http://127.0.0.1:8000/api/v1/titles/?genre_contains=crime&sort_by=-imdb_score")
     const cat1NextPage = await getData("http://127.0.0.1:8000/api/v1/titles/?genre_contains=crime&page=2&sort_by=-imdb_score")
+    const cat2Pictures = await getData("http://127.0.0.1:8000/api/v1/titles/?genre_contains=adventure&sort_by=-imdb_score")
+    const cat2NextPage = await getData("http://127.0.0.1:8000/api/v1/titles/?genre_contains=adventure&page=2&sort_by=-imdb_score")
+    const cat3Pictures = await getData("http://127.0.0.1:8000/api/v1/titles/?genre_contains=Fantasy&sort_by=-imdb_score")
+    const cat3NextPage = await getData("http://127.0.0.1:8000/api/v1/titles/?genre_contains=Fantasy&page=2&sort_by=-imdb_score")
     publishBestMovies(bestMovie.results[0])
+    await publishCarrousel(bestMovie.results, bestMovieNextPage.results, 0)
     await publishCarrousel(cat1Pictures.results, cat1NextPage.results, 1)
     await publishCarrousel(cat2Pictures.results, cat2NextPage.results, 2)
     await publishCarrousel(cat3Pictures.results, cat3NextPage.results, 3)
+    modal(bestMovie.results, bestMovieNextPage.results)
     modal(cat1Pictures.results, cat1NextPage.results)
     modal(cat2Pictures.results, cat2NextPage.results)
     modal(cat3Pictures.results, cat3NextPage.results)
