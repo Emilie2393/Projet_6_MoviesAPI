@@ -24,7 +24,6 @@ function slider(category, number){
     const button = document.querySelectorAll(`.Category${number}__button`)
     const firstCard = document.getElementsByTagName("li")[0].offsetWidth;
     const carouselCards = [...category.children]
-    console.log("carcard", carouselCards)
     // move carousel left or right by the size of one card
     button.forEach(btn => {
         btn.addEventListener("click", () => {
@@ -43,15 +42,13 @@ function slider(category, number){
     })
     // go to position needed if scroll is at beginning or end of carousel
     const infiniteScroll = () => {
+        category.classList.add("no-transition");
         if (category.scrollLeft === 0) {
-            category.classList.add("no-transition");
             category.scrollLeft = category.scrollWidth - (2 * category.offsetWidth);   
-            category.classList.remove("no-transition")
         } else if (Math.ceil(category.scrollLeft) === category.scrollWidth - category.offsetWidth){
-            category.classList.add("no-transition")
             category.scrollLeft = category.offsetWidth;
-            category.classList.remove("no-transition")
         }
+        category.classList.remove("no-transition")
     }
     category.addEventListener("scroll", infiniteScroll)
 }
