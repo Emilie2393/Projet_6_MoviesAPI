@@ -1,4 +1,4 @@
-async function getData(url) {
+async function getData(url){
     const response = await fetch(url);
     if (!response.ok) {
         throw new Error(errorMessage + "Code erreur: " + response.status);
@@ -8,11 +8,11 @@ async function getData(url) {
 }
 
 
-function child(valeur1, valeur2) {
+function child(valeur1, valeur2){
     valeur1.appendChild(valeur2);
 }
 
-function publishBestMovies(bestMovie) {
+function publishBestMovies(bestMovie){
     const img = document.querySelector('#Banner__Img');
     img.src = bestMovie.image_url;
     img.alt = bestMovie.title;
@@ -40,7 +40,7 @@ function slider(category, number){
     carouselCards.slice(0, card).forEach(card => {
         category.insertAdjacentHTML("beforeend", card.outerHTML);
     })
-    // go to position needed if scroll is at beginning or end of carousel
+    // go to needed position if scroll is at beginning or end of carousel
     const infiniteScroll = () => {
         category.classList.add("no-transition");
         if (category.scrollLeft === 0) {
@@ -121,6 +121,8 @@ async function publishCarrousel(pictures, nextPictures, number) {
     nb = 7
     const page = document.querySelector(".Page")
     const container = document.querySelector(`.Category${number}__carousel`)
+    const button = document.querySelector(`.Category${number}__button`)
+    button.id = "left"
     for (let i = 0; i < nb; i++) {
         let li = document.createElement("li")
         li.className = "card"
