@@ -1,5 +1,6 @@
 # Projet_6_MoviesAPI
 
+JustStreamIt is an associative platform to share movies and their informations 
 # - Install API server and run JustStreamIt
 - Clone this repository using $ git clone clone https://github.com/Emilie2393/Projet_6_MoviesAPI.git
 - Move to the ocmovies-api root folder with $ cd ocmovies-api-en
